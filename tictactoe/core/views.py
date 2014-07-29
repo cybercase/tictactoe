@@ -46,6 +46,7 @@ class GameListViewSet(viewsets.mixins.ListModelMixin,
     def pre_save(self, obj):
         obj.user1 = self.request.user
         obj.user1.stats.created += 1
+        obj.user1.stats.save()
 
 
 class GameDetailViewSet(viewsets.mixins.RetrieveModelMixin,

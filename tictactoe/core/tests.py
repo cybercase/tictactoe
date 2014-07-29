@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
-from core.models import Game
+from core.models import Game, Stats
 
 import json
 
@@ -33,6 +33,15 @@ class GameTest(APITestCase):
         response = self.client.get(self.game_obj['url'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(self.game_obj['status'], Game.STATUS_WAITING)
+
+    def test_increase_created(self):
+        stats = Stats.objects.get(pk=self.user_one.stats.pk)
+        self.assertEqual(stats.created, 0)
+
+        self.test_create()
+
+        stats = Stats.objects.get(pk=self.user_one.stats.pk)
+        self.assertEqual(stats.created, 1)
 
 
     def test_join(self):
